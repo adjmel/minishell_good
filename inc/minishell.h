@@ -29,9 +29,6 @@
 
 
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
 
 enum e_token
 {
@@ -73,7 +70,7 @@ typedef struct s_redir
 	struct s_redir	*previous;
 }	t_redir;
 
-typedef struct s_proc
+typedef struct s_mini
 {
 	char			*cmd;
 	char			**args;
@@ -81,9 +78,9 @@ typedef struct s_proc
 	int				error;
 	int				level;
 	struct s_redir	*head;
-	struct s_proc	*next;
-	struct s_proc	*previous;
-}	t_proc;
+	struct s_mini	*next;
+	struct s_mini	*previous;
+}	t_mini;
 
 typedef struct s_data t_data;
 
@@ -100,13 +97,39 @@ typedef struct s_data
 	int				exit_status;
 	int				here_doc;
 	t_builtins		builtins[7];
-	struct s_proc	*head;
+	struct s_mini	*head;
 }	t_data;
 
 
+typedef struct s_exec_builtin
+{
+	int		pipe_stdout;
+	int		pipe_stdin;
+	int		status;
+	t_redir	*current;
+}	t_exec_builtin;
+
+typedef struct s_inspector
+{
+	t_mini	*current;
+	int		_pipe[2];
+	int		prev_pipe[2];
+	int		i;
+	int		level;
+}	t_inspector;
+
+
+typedef struct s_supervisor
+{
+	t_mini	*mn;
+	t_redir	*rd;
+	pid_t	pid;
+	int		status;
+}	t_supervisor;
+
 void	rl_replace_line(const char *str, int i);
 
-/* ------------- libft ------------- */
+// LIBFT
 int		ft_tabsize(char **tab);
 int		ft_atoi(const char *str);
 char	*ft_strdup(char *str);
@@ -128,7 +151,7 @@ char	*ft_strrchr(char *str, int c);
 int		ft_dprintf(int fd, const char *s, ...);
 char	*ft_getenv(t_data *data, char *str);
 
-/* ------------- parsing ------------- */
+// PARSING
 void	parsing(t_data *data, char *input);
 int		syntax_error(t_data *data, char **lx);
 char	**lexical_analysis(char *input);
@@ -140,8 +163,8 @@ char	**alloc_one(void);
 int		not_metachar(char c);
 void	buffer_reset(char **buffer);
 void	parser(t_data *data, char **lx);
-t_proc	*pc_new_node(char **args, int sep, int lvl);
-void	pc_addback(t_proc **lst, t_proc *new);
+t_mini	*pc_new_node(char **args, int sep, int lvl);
+void	pc_addback(t_mini **lst, t_mini *new);
 char	**ft_subarr(char **tab, int start, int size);
 void	rd_addback(t_redir **head, t_redir *new);
 t_redir	*rd_new_node(char *file, int type);
@@ -154,15 +177,14 @@ void	init_list(t_data *data, char **lx);
 void	init_rd(t_data *data);
 int		get_separator(char **lx, int i);
 char	*del_quote(char *str);
-void	wildcard(t_proc *proc);
+void	wildcard(t_mini *mini);
 char	**get_dir_files(char *str);
-char	*prompt(t_data *data);
 int		not_special(char c);
 int		is_arrow(char *str);
 void	cd_oldpwd(t_data *data);
 int		pattern_match(char *filename, char *pattern, int file_i, int patt_i);
 
-/* ------------- builtins ------------- */
+// BUILTINS
 void	init_bltn(t_data *data);
 int		check_home(t_data *data);
 void	cd_home(t_data *data);
@@ -181,35 +203,32 @@ void	re_export(char **args, t_data *data);
 void	re_pwd(char **args, t_data *data);
 void	re_unset(char **args, t_data *data);
 
-/* ------------- execution ------------- */
+// EXEC
 void	init_data_and_banner(t_data *data, int argc, char **argv, char **env);
 void	init_redirections(t_redir **redir);
-void	supervisor(t_data *data);
-int		executor(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]);
-void	init_inspector_and_exec(t_data *data, t_proc *_, int __[2], int ___[2], int i);
-int		priority_condition(t_proc *proc, int level, int token);
-void	apply_priorities(t_data *data, t_proc **proc, int *level);
+void	execution(t_data *data);
+int		executor(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2]);
+void	init_inspector_and_exec(t_data *data, t_mini *_, int __[2], int ___[2], int i);
+int		priority_condition(t_mini *mini, int level, int token);
+void	apply_priorities(t_data *data, t_mini **mini, int *level);
 void	dup_and_close(int fd, int new_fd);
 void	dup_or_error(t_redir *current);
 int		heredoc_and_errors(t_data *data, t_redir **redir, int *status, pid_t *pid);
 void	look_for_cmd_not_found(t_data *data);
 int		exit_status(int status);
-void	check_if_dots(t_data *data, t_proc **proc);
-void	check_if_directory(t_data *data, t_proc **proc);
+void	check_if_dots(t_data *data, t_mini **mini);
+void	check_if_directory(t_data *data, t_mini **mini);
 int		is_builtin(char *cmd);
 int		is_path(t_data *data);
 int		exec_builtin(t_data *data, char *cmd, char **args);
-int		exec_builtin_pipe(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]);
-void	exec_piped(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]);
-int		exec_empty_cmd(t_proc *proc);
-void	exec_cmd(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]);
+int		exec_builtin_pipe(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2]);
+void	exec_piped(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2]);
+int		exec_empty_cmd(t_mini *mini);
+void	exec_cmd(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2]);
 void	wait_for_child(pid_t pid, int _pipe[2], int prev_pipe[2], int *status);
-int		exec_builtin_cmd(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]);
+int		exec_builtin_cmd(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2]);
 void	exec_heredoc(t_data *data, t_redir *current);
 int		handle_heredoc(t_data *data, pid_t pid, int *status);
 void	close_heredocs(t_data *data);
-
-/* ------------- debugging ------------- */
-void	printf_struct(t_data *data);
 
 #endif

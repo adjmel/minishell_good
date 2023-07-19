@@ -17,9 +17,7 @@ int	main(int argc, char **argv, char **env)
 		parsing(&data, input);
 		if (data.errors)
 			continue ;
-		if (DEBUG)
-			printf_struct(&data);
-		supervisor(&data);
+		execution(&data);
 		clear(&data);
 	}
 }

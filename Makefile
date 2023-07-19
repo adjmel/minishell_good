@@ -23,13 +23,10 @@ PARSE = $(addprefix $(PARSE_DIR)/, parsing.c syntax_error.c lexer.c concate.c pa
 EXEC_DIR = src/execution
 EXEC = $(addprefix $(EXEC_DIR)/, supervisor.c exec_command.c exec_builtin.c exec_heredoc.c init_data.c supervisor_utils.c exec_helpers.c)
 
-DEBUG_DIR = src/debug
-DEBUG = $(addprefix $(DEBUG_DIR)/, print_struct.c)
-
 SRCS_DIR = src
-SRCS = $(addprefix $(SRCS_DIR)/, minishell.c clear.c prompt.c)
+SRCS = $(addprefix $(SRCS_DIR)/, minishell.c clear.c)
 
-OBJS = $(SRCS:.c=.o) $(LIBFT:.c=.o) $(PARSE:.c=.o) $(EXEC:.c=.o) $(BUILTINS:.c=.o) $(DEBUG:.c=.o)
+OBJS = $(SRCS:.c=.o) $(LIBFT:.c=.o) $(PARSE:.c=.o) $(EXEC:.c=.o) $(BUILTINS:.c=.o)
 
 all: $(NAME)
 

@@ -1,24 +1,24 @@
 #include "minishell.h"
 
-int	executor(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
+int	executor(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2])
 {
 	pid_t	pid;
 	int		status;
 
-	if (!proc->cmd)
+	if (!mini->cmd)
 	{
 		close(_pipe[1]);
 		close(prev_pipe[0]);
 		return (127);
 	}
-	if (proc->cmd[0] == '\0')
-		return (exec_empty_cmd(proc));
-	if (is_builtin(proc->cmd))
-		return (exec_builtin_cmd(data, proc, _pipe, prev_pipe));
+	if (mini->cmd[0] == '\0')
+		return (exec_empty_cmd(mini));
+	if (is_builtin(mini->cmd))
+		return (exec_builtin_cmd(data, mini, _pipe, prev_pipe));
 	status = 0;
 	pid = fork();
 	if (pid == 0)
-		exec_cmd(data, proc, _pipe, prev_pipe);
+		exec_cmd(data, mini, _pipe, prev_pipe);
 	else if (pid > 0)
 		wait_for_child(pid, _pipe, prev_pipe, &status);
 	else
@@ -26,14 +26,6 @@ int	executor(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
 	return (exit_status(status));
 }
 
-typedef struct s_inspector
-{
-	t_proc	*current;
-	int		_pipe[2];
-	int		prev_pipe[2];
-	int		i;
-	int		level;
-}	t_inspector;
 
 void	inspector(t_data *data)
 {
@@ -60,39 +52,31 @@ void	inspector(t_data *data)
 	close_heredocs(data);
 }
 
-typedef struct s_supervisor
-{
-	t_proc	*cr;
-	t_redir	*rd;
-	pid_t	pid;
-	int		status;
-}	t_supervisor;
-
-void	supervisor(t_data *data)
+void	execution(t_data *data)
 {
 	t_supervisor	s;
 
-	s.cr = data->head;
-	while (s.cr)
+	s.mn = data->head;
+	while (s.mn)
 	{
-		if (s.cr->head)
+		if (s.mn->head)
 		{
-			s.rd = s.cr->head;
+			s.rd = s.mn->head;
 			while (s.rd)
 			{
 				if (s.rd->type == HEREDOC
 					&& heredoc_and_errors(data, &s.rd, &s.status, &s.pid))
 					return ;
-				else if (s.rd->type == INPUT && (!s.cr->cmd || !(*s.cr->cmd))
-					&& !s.cr->error && access(s.rd->file, F_OK) == -1)
+				else if (s.rd->type == INPUT && (!s.mn->cmd || !(*s.mn->cmd))
+					&& !s.mn->error && access(s.rd->file, F_OK) == -1)
 				{
-					s.cr->error = 1;
+					s.mn->error = 1;
 					ft_dprintf(2, CUSTOM, s.rd->file, strerror(errno));
 				}
 				s.rd = s.rd->next;
 			}
 		}
-		s.cr = s.cr->next;
+		s.mn = s.mn->next;
 	}
 	inspector(data);
 }
