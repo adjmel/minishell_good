@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   supervisor_utils.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 21:06:19 by absalhi           #+#    #+#             */
-/*   Updated: 2023/02/03 04:36:23 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	init_inspector_and_exec(t_data *data, t_proc *proc, int prev_pipe[2], int _pipe[2],
@@ -52,7 +40,6 @@ void	apply_priorities(t_data *data, t_proc **proc, int *level)
 {
 	if (data->exit_status && (*proc)->separator == AND_TOKEN)
 	{
-		printf("exit: %d\n", data->exit_status);
 		*level = (*proc)->level;
 		while (priority_condition(*proc, *level, AND_TOKEN))
 			*proc = (*proc)->next;

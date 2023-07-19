@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/14 11:13:58 by mtellami          #+#    #+#             */
-/*   Updated: 2023/02/04 14:16:52 by mtellami         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -31,6 +19,8 @@
 # define RESET " \e[00m"
 # define GREEN "\e[01;32m"
 # define RED "\e[01;31m"
+# define BLUE "\033[1;34m"
+# define ESC_COLOR "\033[0m"
 # define GREEN_ARROW "\e[01;32m➜  "
 # define RED_ARROW "\e[01;31m➜  "
 # define HERE_DOC "/tmp/.heredoc"
@@ -100,7 +90,7 @@ typedef struct s_data t_data;
 typedef struct s_builtins
 {
 	char	*name;
-	void	(*func)(char **, t_data *data);
+	void	(*func)(char **, t_data *);
 }	t_builtins;
 
 typedef struct s_data
@@ -141,7 +131,7 @@ char	*ft_getenv(t_data *data, char *str);
 /* ------------- parsing ------------- */
 void	parsing(t_data *data, char *input);
 int		syntax_error(t_data *data, char **lx);
-char	**lexer(char *input);
+char	**lexical_analysis(char *input);
 int		empty(t_data *data, char *input);
 void	space_skiper(char *str, int *i);
 char	**arr_concate(char **tab, char *str);
@@ -173,7 +163,7 @@ void	cd_oldpwd(t_data *data);
 int		pattern_match(char *filename, char *pattern, int file_i, int patt_i);
 
 /* ------------- builtins ------------- */
-void	init_builtins(t_data *data);
+void	init_bltn(t_data *data);
 int		check_home(t_data *data);
 void	cd_home(t_data *data);
 int		check_var(t_data *data, char *str);
@@ -192,7 +182,7 @@ void	re_pwd(char **args, t_data *data);
 void	re_unset(char **args, t_data *data);
 
 /* ------------- execution ------------- */
-void	init_session(t_data *data, int argc, char **argv, char **env);
+void	init_data_and_banner(t_data *data, int argc, char **argv, char **env);
 void	init_redirections(t_redir **redir);
 void	supervisor(t_data *data);
 int		executor(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]);

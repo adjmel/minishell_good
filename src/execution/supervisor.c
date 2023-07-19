@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   supervisor.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/26 21:38:16 by absalhi           #+#    #+#             */
-/*   Updated: 2023/02/03 03:54:54 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	executor(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
@@ -67,7 +55,7 @@ void	inspector(t_data *data)
 	}
 	close(s._pipe[0]);
 	close(s._pipe[1]);
-	// close(s.prev_pipe[0]);
+	close(s.prev_pipe[0]);
 	close(s.prev_pipe[1]);
 	close_heredocs(data);
 }

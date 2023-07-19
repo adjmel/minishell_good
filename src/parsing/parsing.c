@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/14 11:50:45 by mtellami          #+#    #+#             */
-/*   Updated: 2023/02/05 00:46:14 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	not_metachar(char c)
@@ -35,7 +23,7 @@ int	empty(t_data *data, char *input)
 	i = -1;
 	if (!input)
 	{
-		printf("ex0it\n");
+		printf("exit\n");
 		exit(data->exit_status);
 	}
 	while (input[++i])
@@ -47,10 +35,10 @@ int	empty(t_data *data, char *input)
 
 void	sig_handler(int sig)
 {
-	if (sig == SIGINT /*&& !g_data.here_doc*/)
+	if (sig == SIGINT)
 	{
 		printf("\n");
-		rl_replace_line("", 0);
+		rl_replace_line("b", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -58,18 +46,18 @@ void	sig_handler(int sig)
 
 void	parsing(t_data *data, char *input)
 {
-	char	**ps;
+	char	**commands;
 
 	data->errors = 0;
-	ps = lexer(input);
-	if (syntax_error(data, ps))
+	commands = lexical_analysis(input);
+	if (syntax_error(data, commands))
 	{
 		data->errors = 1;
 		free(input);
-		ft_freearr(ps);
+		ft_freearr(commands);
 		return ;
 	}
-	parser(data, ps);
-	ft_freearr(ps);
+	parser(data, commands);
+	ft_freearr(commands);
 	free(input);
 }

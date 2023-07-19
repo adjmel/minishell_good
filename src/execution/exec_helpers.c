@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_helpers.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 02:54:22 by absalhi           #+#    #+#             */
-/*   Updated: 2023/02/05 00:30:12 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	exec_builtin_pipe(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
@@ -71,7 +59,10 @@ void	check_if_directory(t_data *data, t_proc **proc)
 {
 	DIR	*dir;
 
-	dir = opendir((*proc)->cmd);
+	if(!(*proc)->cmd)
+		return;
+	else
+		dir = opendir((*proc)->cmd);
 	if (dir && !(*proc)->error)
 	{
 		ft_dprintf(2, CUSTOM, (*proc)->args[0], "is a directory");

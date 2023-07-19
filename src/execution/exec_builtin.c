@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_builtin.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 00:19:59 by absalhi           #+#    #+#             */
-/*   Updated: 2023/02/03 04:51:41 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-void	init_builtins(t_data *data)
+void	init_bltn(t_data *data)
 {
 	data->builtins[0].name = "echo";
 	data->builtins[0].func = &re_echo;

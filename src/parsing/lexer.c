@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/14 11:55:01 by mtellami          #+#    #+#             */
-/*   Updated: 2023/01/29 22:42:55 by mtellami         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	quote_analyse(char **buffer, char *input, int *i)
@@ -30,13 +18,17 @@ void	quote_analyse(char **buffer, char *input, int *i)
 			s_quote++;
 		else if (input[*i] == DOUBLE_QUOTE && s_quote % 2 == 0)
 			d_quote++;
+		*buffer = str_concate(*buffer, input[(*i)++]);
 		if (s_quote % 2 == 0 && d_quote % 2 == 0
+			&& (!not_metachar(input[*i]) || !input[(*i)]))
+			break ;
+		/*if (s_quote % 2 == 0 && d_quote % 2 == 0
 			&& (!not_metachar(input[*i + 1]) || !input[(*i) + 1]))
 			break ;
-		*buffer = str_concate(*buffer, input[(*i)++]);
+		*buffer = str_concate(*buffer, input[(*i)++]);*/
 	}
-	if (input[*i])
-		*buffer = str_concate(*buffer, input[(*i)++]);
+	/*if (input[*i])
+		*buffer = str_concate(*buffer, input[(*i)++]);*/
 }
 
 void	separator_analyse(char **buffer, char *input, int *i)
@@ -59,13 +51,13 @@ void	words_analyse(char **buffer, char *input, int *i)
 	}
 }
 
-char	**lexer(char *input)
+char	**lexical_analysis(char *input)
 {
-	char	**lx;
+	char	**commands;
 	char	*buffer;
 	int		i;
 
-	lx = NULL;
+	commands = NULL;
 	buffer = NULL;
 	i = 0;
 	while (input[i])
@@ -82,8 +74,8 @@ char	**lexer(char *input)
 		else
 			words_analyse(&buffer, input, &i);
 		if (buffer)
-			lx = arr_concate(lx, buffer);
+			commands = arr_concate(commands, buffer);
 		buffer_reset(&buffer);
 	}
-	return (lx);
+	return (commands);
 }

@@ -1,33 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/14 11:44:18 by mtellami          #+#    #+#             */
-/*   Updated: 2023/02/05 06:45:57 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
-
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
-	char	*name;
 	t_data	data;
 
-
-	init_session(&data, argc, argv, env);
+	init_data_and_banner(&data, argc, argv, env);
 	while (1)
 	{
-		name = prompt(&data);
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, sig_handler);
-		input = readline(name);
-		free(name);
+		input = readline("\033[1;34m minishell> \033[0m");
 		if (empty(&data, input))
 			continue ;
 		add_history(input);

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_command.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: absalhi <absalhi@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/26 22:38:52 by absalhi           #+#    #+#             */
-/*   Updated: 2023/02/05 02:06:28 by absalhi          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	exit_status(int status)
@@ -92,7 +80,7 @@ void	wait_for_child(pid_t pid, int _pipe[2], int prev_pipe[2], int *status)
 	(void)_pipe;
 	(void)prev_pipe;
 	close(_pipe[1]);
-	// close(prev_pipe[0]);
+	close(prev_pipe[0]);
 	signal(SIGINT, SIG_IGN);
 	if (waitpid(pid, status, 0) == -1)
 	{
