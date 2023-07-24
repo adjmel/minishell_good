@@ -9,7 +9,7 @@ int	exit_status(int status)
 	return (status);
 }
 
-int	exec_empty_cmd(t_proc *proc)
+int	exec_empty_cmd(t_mini *proc)
 {
 	t_redir	*current;
 
@@ -51,7 +51,7 @@ void	dup_or_error(t_redir *current)
 	}
 }
 
-void	exec_cmd(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
+void	exec_cmd(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
 {
 	t_redir	*current;
 

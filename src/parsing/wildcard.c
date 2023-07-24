@@ -60,7 +60,7 @@ char	**expand_wildcard(char **buffer, char *str)
 	return (tab);
 }
 
-void	wildcard(t_proc *proc)
+void	wildcard(t_mini *proc)
 {
 	char	**buffer;
 	int		i;

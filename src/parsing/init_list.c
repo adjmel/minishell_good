@@ -44,7 +44,7 @@ void	level_track(char **lx, int *i, int *lvl, int p)
 
 void	init_list(t_data *data, char **lx)
 {
-	t_proc	*node;
+	t_mini	*node;
 	char	**buffer;
 	int		lvl;
 	int		i;

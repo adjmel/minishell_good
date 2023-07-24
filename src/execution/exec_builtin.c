@@ -64,7 +64,7 @@ int	dup_or_error_builtin(t_redir *current)
 	return (EXIT_SUCCESS);
 }
 
-int	exec_builtin_cmd(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
+int	exec_builtin_cmd(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
 {
 	t_exec_builtin	s;
 

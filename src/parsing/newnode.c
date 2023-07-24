@@ -15,11 +15,11 @@ t_redir	*rd_new_node(char *file, int type)
 	return (new);
 }
 
-t_proc	*pc_new_node(char **args, int sep, int lvl)
+t_mini	*pc_new_node(char **args, int sep, int lvl)
 {
-	t_proc	*new;
+	t_mini	*new;
 
-	new = malloc(sizeof(t_proc));
+	new = malloc(sizeof(t_mini));
 	if (!new)
 		return (NULL);
 	new->cmd = NULL;

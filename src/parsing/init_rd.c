@@ -27,7 +27,7 @@ int	check_redir(char **args)
 	return (0);
 }
 
-void	fill_rd(t_proc *tmp, char ***buffer)
+void	fill_rd(t_mini *tmp, char ***buffer)
 {
 	t_redir	*node;
 	int		i;
@@ -49,7 +49,7 @@ void	fill_rd(t_proc *tmp, char ***buffer)
 	}
 }
 
-void	expand_files(t_data *data, t_proc *proc)
+void	expand_files(t_data *data, t_mini *proc)
 {
 	t_redir	*ptr;
 
@@ -65,7 +65,7 @@ void	expand_files(t_data *data, t_proc *proc)
 
 void	init_rd(t_data *data)
 {
-	t_proc	*tmp;
+	t_mini	*tmp;
 	char	**buffer;
 
 	tmp = data->head;

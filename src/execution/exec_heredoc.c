@@ -37,7 +37,7 @@ void	exec_heredoc(t_data *data, t_redir *current)
 
 void	close_heredocs(t_data *data)
 {
-	t_proc	*current;
+	t_mini	*current;
 	t_redir	*redir;
 	char	*line;
 

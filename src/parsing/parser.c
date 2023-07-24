@@ -2,7 +2,7 @@
 
 void	get_cmd_path(t_data *data)
 {
-	t_proc	*tmp;
+	t_mini	*tmp;
 
 	tmp = data->head;
 	while (tmp)
@@ -41,7 +41,7 @@ char	*del_quote(char *str)
 	return (buffer);
 }
 
-void	quote_expand(t_data *data, t_proc *proc)
+void	quote_expand(t_data *data, t_mini *proc)
 {
 	int		i;
 
@@ -57,7 +57,7 @@ void	quote_expand(t_data *data, t_proc *proc)
 
 void	parser(t_data *data, char **lx)
 {
-	t_proc	*tmp;
+	t_mini	*tmp;
 
 	init_list(data, lx);
 	init_rd(data);

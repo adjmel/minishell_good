@@ -2,28 +2,28 @@
 
 void	clear_list(t_data *data)
 {
-	t_proc	*pc_tmp;
+	t_mini	*mini;
 	t_redir	*rd_tmp;
 
 	while (data->head)
 	{
-		pc_tmp = data->head;
-		while (pc_tmp->head)
+		mini = data->head;
+		while (mini->head)
 		{
-			rd_tmp = pc_tmp->head;
-			pc_tmp->head = pc_tmp->head->next;
+			rd_tmp = mini->head;
+			mini->head = mini->head->next;
 			free(rd_tmp);
 			rd_tmp = NULL;
 		}
 		data->head = data->head->next;
-		free(pc_tmp);
-		pc_tmp = NULL;
+		free(mini);
+		mini = NULL;
 	}
 }
 
 void	clear(t_data *data)
 {
-	t_proc	*tmp1;
+	t_mini	*tmp1;
 	t_redir	*tmp2;
 
 	tmp1 = data->head;

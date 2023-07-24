@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	exec_builtin_pipe(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
+int	exec_builtin_pipe(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
 {
 	pid_t	pid;
 	int		status;
@@ -17,7 +17,7 @@ int	exec_builtin_pipe(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2]
 	return (exit_status(status));
 }
 
-void	exec_piped(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
+void	exec_piped(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
 {
 	t_redir	*current;
 
@@ -36,7 +36,7 @@ void	exec_piped(t_data *data, t_proc *proc, int _pipe[2], int prev_pipe[2])
 	exit(exec_builtin(data, proc->cmd, proc->args));
 }
 
-void	check_if_dots(t_data *data, t_proc **proc)
+void	check_if_dots(t_data *data, t_mini **proc)
 {
 	if (!(*proc)->args)
 		return ;
@@ -55,7 +55,7 @@ void	check_if_dots(t_data *data, t_proc **proc)
 	}
 }
 
-void	check_if_directory(t_data *data, t_proc **proc)
+void	check_if_directory(t_data *data, t_mini **proc)
 {
 	DIR	*dir;
 

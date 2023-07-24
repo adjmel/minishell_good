@@ -9,7 +9,7 @@ t_redir	*rd_last_node(t_redir *lst)
 	return (lst);
 }
 
-t_proc	*pc_last_node(t_proc *lst)
+t_mini	*pc_last_node(t_mini *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -35,9 +35,9 @@ void	rd_addback(t_redir **head, t_redir *new)
 		*head = new;
 }
 
-void	pc_addback(t_proc **head, t_proc *new)
+void	pc_addback(t_mini **head, t_mini *new)
 {
-	t_proc	*tmp;
+	t_mini	*tmp;
 
 	tmp = *head;
 	if (!head || !new)

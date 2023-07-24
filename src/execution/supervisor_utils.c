@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	init_inspector_and_exec(t_data *data, t_proc *proc, int prev_pipe[2], int _pipe[2],
+void	init_inspector_and_exec(t_data *data, t_mini *proc, int prev_pipe[2], int _pipe[2],
 		int i)
 {
 	if (i % 2)
@@ -23,7 +23,7 @@ void	init_inspector_and_exec(t_data *data, t_proc *proc, int prev_pipe[2], int _
 	}
 }
 
-int	priority_condition(t_proc *proc, int level, int token)
+int	priority_condition(t_mini *proc, int level, int token)
 {
 	if (token == AND_TOKEN)
 		return (proc && (proc->separator == AND_TOKEN
@@ -36,7 +36,7 @@ int	priority_condition(t_proc *proc, int level, int token)
 	return (EXIT_SUCCESS);
 }
 
-void	apply_priorities(t_data *data, t_proc **proc, int *level)
+void	apply_priorities(t_data *data, t_mini **proc, int *level)
 {
 	if (data->exit_status && (*proc)->separator == AND_TOKEN)
 	{
@@ -73,7 +73,7 @@ int	heredoc_and_errors(t_data *data, t_redir **redir, int *status, pid_t *pid)
 
 void	look_for_cmd_not_found(t_data *data)
 {
-	t_proc	*current;
+	t_mini	*current;
 
 	current = data->head;
 	while (current)
