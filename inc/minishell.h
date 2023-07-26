@@ -146,7 +146,7 @@ typedef struct s_supervisor
 
 void	rl_replace_line(const char *str, int i);
 
-// LIBF
+// LIBFT
 int		ft_tabsize(char **tab);
 int		ft_atoi(const char *str);
 char	*ft_strdup(char *str);
