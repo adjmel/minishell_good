@@ -173,7 +173,7 @@ char	*absolute_path(t_data *data, char *cmd);
 char	*expand(t_data *data, char *str, int quotes);
 void	sig_handler(int sig);
 int		parentheses_check(t_data *data, char **lx, int i, int *x, int *y);
-void	init_list(t_data *data, char **lx);
+void	init_list(t_data **data, char **lx);
 void	init_rd(t_data *data);
 int		get_separator(char **lx, int i);
 char	*del_quote(char *str);

@@ -59,9 +59,9 @@ void	parser(t_data *data, char **lx)
 {
 	t_mini	*tmp;
 
-	init_list(data, lx);
-	init_rd(data);
 	tmp = data->head;
+	init_list(&data, lx);
+	init_rd(data);
 	while (tmp)
 	{
 		wildcard(tmp);

@@ -42,7 +42,7 @@ void	level_track(char **lx, int *i, int *lvl, int p)
 	}
 }
 
-void	init_list(t_data *data, char **lx)
+void	init_list(t_data **data, char **lx)
 {
 	t_mini	*node;
 	char	**buffer;
@@ -51,7 +51,7 @@ void	init_list(t_data *data, char **lx)
 
 	lvl = 0;
 	i = 0;
-	data->head = NULL;
+	(*data)->head = NULL;
 	while (lx[i])
 	{
 		level_track(lx, &i, &lvl, 0);
@@ -60,7 +60,7 @@ void	init_list(t_data *data, char **lx)
 				&& ft_strcmp(lx[i], "|") && ft_strcmp(lx[i], "||")))
 			buffer = arr_concate(buffer, lx[i++]);
 		node = pc_new_node(buffer, get_separator(lx, i), lvl);
-		pc_addback(&data->head, node);
+		pc_addback(&(*data)->head, node);
 		level_track(lx, &i, &lvl, 1);
 		if (lx[i])
 			i++;

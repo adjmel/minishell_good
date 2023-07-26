@@ -8,7 +8,7 @@ char	**get_secure_paths(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strstr(env[i], "PATH"))
+		if (!ft_strncmp(env[i], "PATH", 4))
 		{
 			tree = ft_split(env[i] + 5, ':');
 			return (tree);
