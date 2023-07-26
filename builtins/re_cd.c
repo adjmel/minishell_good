@@ -71,7 +71,7 @@ void	re_cd(char **args, t_data *data)
 		i = chdir(args[1]);
 		if (i == -1)
 		{
-			ft_dprintf(2, CUSTOM_2, "cd", args[1], strerror(errno));
+			fd_printf(2, CUSTOM_2, "cd", args[1], strerror(errno));
 			data->exit_status = 1;
 			free(cwd);
 			return ;
@@ -79,7 +79,7 @@ void	re_cd(char **args, t_data *data)
 		set_pwd(data);
 	}
 	else if (!cwd)
-		ft_dprintf(2, "cd: error retrieving current directory: getcwd:\
+		fd_printf(2, "cd: error retrieving current directory: getcwd:\
 		cannot access parent directories: No such file or directory\n");
 	free(cwd);
 }

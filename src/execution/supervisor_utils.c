@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-void	init_inspector_and_exec(t_data *data, t_mini *proc, int prev_pipe[2], int _pipe[2],
+void	init_exec(t_data *data, t_mini *proc, int prev_pipe[2], int _pipe[2],
 		int i)
 {
 	if (i % 2)
 	{
 		if (pipe(prev_pipe) == -1)
 		{
-			ft_dprintf(STDERR_FILENO, FAIL_PIPE, strerror(errno));
+			fd_printf(STDERR_FILENO, FAIL_PIPE, strerror(errno));
 			exit(EXIT_FAILURE);
 		}
 		data->exit_status = executor(data, proc, prev_pipe, _pipe);
@@ -16,7 +16,7 @@ void	init_inspector_and_exec(t_data *data, t_mini *proc, int prev_pipe[2], int _
 	{
 		if (pipe(_pipe) == -1)
 		{
-			ft_dprintf(STDERR_FILENO, FAIL_PIPE, strerror(errno));
+			fd_printf(STDERR_FILENO, FAIL_PIPE, strerror(errno));
 			exit(EXIT_FAILURE);
 		}
 		data->exit_status = executor(data, proc, _pipe, prev_pipe);
@@ -36,7 +36,7 @@ int	priority_condition(t_mini *proc, int level, int token)
 	return (EXIT_SUCCESS);
 }
 
-void	apply_priorities(t_data *data, t_mini **proc, int *level)
+void	level_priority(t_data *data, t_mini **proc, int *level)
 {
 	if (data->exit_status && (*proc)->separator == AND_TOKEN)
 	{
@@ -67,11 +67,11 @@ int	heredoc_and_errors(t_data *data, t_redir **redir, int *status, pid_t *pid)
 			return (EXIT_FAILURE);
 	}
 	else
-		ft_dprintf(STDERR_FILENO, FAIL_FORK, strerror(errno));
+		fd_printf(STDERR_FILENO, FAIL_FORK, strerror(errno));
 	return (EXIT_SUCCESS);
 }
 
-void	look_for_cmd_not_found(t_data *data)
+void	error_command(t_data *data)
 {
 	t_mini	*current;
 
@@ -82,11 +82,11 @@ void	look_for_cmd_not_found(t_data *data)
 			&& !current->error)
 		{
 			if (ft_strchr(current->args[0], '/'))
-				ft_dprintf(2, ERR_NO_SUCH_FILE, current->args[0]);
+				fd_printf(2, ERR_NO_SUCH_FILE, current->args[0]);
 			else if (!is_path(data))
-				ft_dprintf(2, ERR_NO_SUCH_FILE, current->args[0]);
+				fd_printf(2, ERR_NO_SUCH_FILE, current->args[0]);
 			else
-				ft_dprintf(2, ERR_CMD_NOT_FOUND, current->args[0]);
+				fd_printf(2, ERR_CMD_NOT_FOUND, current->args[0]);
 		}
 		current = current->next;
 	}

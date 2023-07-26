@@ -16,7 +16,7 @@ void	re_env(char **args, t_data *data)
 	}
 	if (i != -1)
 	{
-		ft_dprintf(STDERR_FILENO, ERR_NO_SUCH_FILE, "env");
+		fd_printf(STDERR_FILENO, ERR_NO_SUCH_FILE, "env");
 		data->exit_status = 127;
 		return ;
 	}

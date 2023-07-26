@@ -14,7 +14,24 @@
 # include <signal.h>
 # include <string.h>
 # include <stdarg.h>
-# include "errors.h"
+
+# define ERR_PERMISSION "minishell: %s: Permission denied\n"
+# define ERR_NO_SUCH_FILE "minishell: %s: No such file or directory\n"
+# define ERR_NO_SUCH_FILE_2 "minishell: %s: %s: No such file or directory\n"
+# define ERR_CMD_NOT_FOUND "minishell: %s: command not found\n"
+# define ERR_INVALID_IDENT "minishell: %s: `%s': not a valid identifier\n"
+# define ERR_UNSET "minishell: cd: %s not set\n"
+# define ERR_NUMERIC_ARG "minishell: exit: %s: numeric argument required\n"
+# define ERR_TOO_MANY_ARGS "minishell: exit: too many arguments\n"
+
+# define FAIL_FORK "minishell: fork: %s\n"
+# define FAIL_WAITPID "minishell: waitpid: %s\n"
+# define FAIL_PIPE "minishell: pipe: %s\n"
+
+# define CUSTOM "minishell: %s: %s\n"
+# define CUSTOM_2 "minishell: %s: %s: %s\n"
+# define UNEXPECTED_TOKEN "minishell: syntax error near unexpected token `%s'\n"
+# define UNCLOSED_QUOT "minishell: syntax error near unclosed quotation mark\n"
 
 # define RESET " \e[00m"
 # define GREEN "\e[01;32m"
@@ -148,7 +165,7 @@ char	*ft_itoa(int n);
 char	*ft_strchr(char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strrchr(char *str, int c);
-int		ft_dprintf(int fd, const char *s, ...);
+int		fd_printf(int fd, const char *s, ...);
 char	*ft_getenv(t_data *data, char *str);
 
 // PARSING
@@ -208,16 +225,16 @@ void	init_data_and_banner(t_data *data, int argc, char **argv, char **env);
 void	init_redirections(t_redir **redir);
 void	execution(t_data *data);
 int		executor(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2]);
-void	init_inspector_and_exec(t_data *data, t_mini *_, int __[2], int ___[2], int i);
+void	init_exec(t_data *data, t_mini *_, int __[2], int ___[2], int i);
 int		priority_condition(t_mini *mini, int level, int token);
-void	apply_priorities(t_data *data, t_mini **mini, int *level);
+void	level_priority(t_data *data, t_mini **mini, int *level);
 void	dup_and_close(int fd, int new_fd);
 void	dup_or_error(t_redir *current);
 int		heredoc_and_errors(t_data *data, t_redir **redir, int *status, pid_t *pid);
-void	look_for_cmd_not_found(t_data *data);
+void	error_command(t_data *data);
 int		exit_status(int status);
-void	check_if_dots(t_data *data, t_mini **mini);
-void	check_if_directory(t_data *data, t_mini **mini);
+void	error_dots(t_data *data, t_mini **mini);
+void	error_dir(t_data *data, t_mini **mini);
 int		is_builtin(char *cmd);
 int		is_path(t_data *data);
 int		exec_builtin(t_data *data, char *cmd, char **args);

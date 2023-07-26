@@ -47,10 +47,10 @@ int	dup_or_error_builtin(t_redir *current)
 {
 	init_redirections(&current);
 	if (current->fd == -1)
-		return (ft_dprintf(2, ERR_PERMISSION, current->file),
+		return (fd_printf(2, ERR_PERMISSION, current->file),
 			EXIT_FAILURE);
 	if (current->fd == -2)
-		return (ft_dprintf(2, ERR_NO_SUCH_FILE, current->file),
+		return (fd_printf(2, ERR_NO_SUCH_FILE, current->file),
 			EXIT_FAILURE);
 	if (current->type == INPUT)
 		dup_and_close(current->fd, STDIN_FILENO);

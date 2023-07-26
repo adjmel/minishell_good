@@ -10,9 +10,9 @@ int	separator_check(t_data *data, char **lx, int i)
 			|| !ft_strcmp(lx[i + 1], "&&"))
 		{
 			if (!lx[i + 1])
-				ft_dprintf(2, UNEXPECTED_TOKEN, lx[i]);
+				fd_printf(2, UNEXPECTED_TOKEN, lx[i]);
 			else
-				ft_dprintf(2, UNEXPECTED_TOKEN, lx[i + 1]);
+				fd_printf(2, UNEXPECTED_TOKEN, lx[i + 1]);
 			data->exit_status = 258;
 			return (1);
 		}
@@ -26,14 +26,14 @@ int	redirection_check(t_data *data, char **lx, int i)
 	{
 		if (!lx[i + 1])
 		{
-			ft_dprintf(2, UNEXPECTED_TOKEN, "newline");
+			fd_printf(2, UNEXPECTED_TOKEN, "newline");
 			data->exit_status = 258;
 			return (1);
 		}
 		else if (is_arrow(lx[i + 1]) != -1 || !ft_strcmp(lx[i + 1], "|")
 			|| !ft_strcmp(lx[i + 1], "||") || !ft_strcmp(lx[i + 1], "&&"))
 		{
-			ft_dprintf(2, UNEXPECTED_TOKEN, lx[i + 1]);
+			fd_printf(2, UNEXPECTED_TOKEN, lx[i + 1]);
 			data->exit_status = 258;
 			return (1);
 		}
@@ -56,7 +56,7 @@ int	quote_check(t_data *data, char *str)
 				i++;
 			if (!str[i])
 			{
-				ft_dprintf(STDERR_FILENO, UNCLOSED_QUOT);
+				fd_printf(STDERR_FILENO, UNCLOSED_QUOT);
 				return (data->exit_status = 258, 1);
 			}
 		}
@@ -70,7 +70,7 @@ int	invalid_sep(t_data *data, char **lx, int i)
 	if (!ft_strcmp(lx[i], "&") || !ft_strcmp(lx[0], "&&")
 		|| !ft_strcmp(lx[0], "||") || !ft_strcmp(lx[0], "|"))
 	{
-		ft_dprintf(2, UNEXPECTED_TOKEN, lx[i]);
+		fd_printf(2, UNEXPECTED_TOKEN, lx[i]);
 		data->exit_status = 258;
 		return (1);
 	}

@@ -72,7 +72,7 @@ void	re_unset(char **args, t_data *data)
 	{
 		if (!validate(args[i]))
 		{
-			ft_dprintf(STDERR_FILENO, ERR_INVALID_IDENT, "unset", args[i]);
+			fd_printf(STDERR_FILENO, ERR_INVALID_IDENT, "unset", args[i]);
 			data->exit_status = EXIT_FAILURE;
 		}
 		else

@@ -15,7 +15,7 @@ BUILTINS_DIR = builtins
 BUILTINS = $(addprefix $(BUILTINS_DIR)/, builtins_utils.c re_cd.c re_echo.c re_env.c re_exit.c re_export.c re_pwd.c re_unset.c)
 
 LIBFT_DIR = libft
-LIBFT = $(addprefix $(LIBFT_DIR)/, ft_strlen.c ft_strdup.c ft_freearr.c ft_tabsize.c ft_strcmp.c ft_subarr.c ft_strcjoin.c ft_split.c ft_strstr.c ft_tabdup.c ft_substr.c ft_itoa.c ft_strchr.c ft_strjoin.c ft_atoi.c ft_bzero.c ft_strrchr.c ft_dprintf.c ft_getenv.c)
+LIBFT = $(addprefix $(LIBFT_DIR)/, ft_strlen.c ft_strdup.c ft_freearr.c ft_tabsize.c ft_strcmp.c ft_subarr.c ft_strcjoin.c ft_split.c ft_strstr.c ft_tabdup.c ft_substr.c ft_itoa.c ft_strchr.c ft_strjoin.c ft_atoi.c ft_bzero.c ft_strrchr.c fd_printf.c ft_getenv.c)
 
 PARSE_DIR = src/parsing
 PARSE = $(addprefix $(PARSE_DIR)/, parsing.c syntax_error.c lexer.c concate.c parser.c lst_addback.c newnode.c absolute_path.c expand.c parentheses_check.c init_list.c init_rd.c wildcard.c readdir.c pattern_match.c)

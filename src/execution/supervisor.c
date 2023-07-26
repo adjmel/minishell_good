@@ -22,7 +22,7 @@ int	executor(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2])
 	else if (pid > 0)
 		wait_for_child(pid, _pipe, prev_pipe, &status);
 	else
-		ft_dprintf(2, FAIL_FORK, strerror(errno));
+		fd_printf(2, FAIL_FORK, strerror(errno));
 	return (exit_status(status));
 }
 
@@ -31,15 +31,15 @@ void	inspector(t_data *data)
 {
 	t_inspector	s;
 
-	look_for_cmd_not_found(data);
-	s.i = -1;
+	error_command(data);
+	s.i = -1; //
 	s.current = data->head;
 	while (s.current)
 	{
-		check_if_dots(data, &s.current);
-		check_if_directory(data, &s.current);
-		init_inspector_and_exec(data, s.current, s._pipe, s.prev_pipe, s.i);
-		apply_priorities(data, &s.current, &s.level);
+		error_dots(data, &s.current);
+		error_dir(data, &s.current);
+		init_exec(data, s.current, s._pipe, s.prev_pipe, s.i);
+		level_priority(data, &s.current, &s.level);
 		s.i++;
 		if (s.current->separator != PIPE_TOKEN)
 			s.i = -1;
@@ -71,7 +71,7 @@ void	execution(t_data *data)
 					&& !s.mn->error && access(s.rd->file, F_OK) == -1)
 				{
 					s.mn->error = 1;
-					ft_dprintf(2, CUSTOM, s.rd->file, strerror(errno));
+					fd_printf(2, CUSTOM, s.rd->file, strerror(errno));
 				}
 				s.rd = s.rd->next;
 			}

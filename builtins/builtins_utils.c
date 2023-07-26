@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void	value_inquotes(t_data *data, int i)
+void value_inquotes(t_data *data, int i)
 {
-	int	j;
+	int j;
 
 	j = 0;
 	printf("declare -x ");
@@ -10,22 +10,22 @@ void	value_inquotes(t_data *data, int i)
 	{
 		printf("%c", data->env[i][j]);
 		if (data->env[i][j] == '=')
-			break ;
+			break;
 		j++;
 	}
 	printf("%c%s%c\n", '"', data->env[i] + j + 1, '"');
 }
 
-int	check_var(t_data *data, char *str)
+int check_var(t_data *data, char *str)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	j = 0;
 	while (str[j])
 	{
 		if (str[j] == '=')
-			break ;
+			break;
 		j++;
 	}
 	i = 0;
@@ -39,36 +39,33 @@ int	check_var(t_data *data, char *str)
 	return (-1);
 }
 
-int	valid_ident(char *str)
+int valid_ident(char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
-		if (!((str[i] >= 'a' && str[i] <= 'z')
-				|| (str[i] >= 'A' && str[i] <= 'Z')
-				|| (str[i] >= '0' && str[i] <= '9')
-				|| str[i] == '_'))
+		if (!((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9') || str[i] == '_'))
 		{
-			ft_dprintf(STDERR_FILENO, ERR_INVALID_IDENT, "export", str);
+			fd_printf(STDERR_FILENO, ERR_INVALID_IDENT, "export", str);
 			return (1);
 		}
 		i++;
 	}
 	if (!i || (str[0] >= '0' && str[0] <= '9') || str[i] == SPACE)
 	{
-		ft_dprintf(STDERR_FILENO, ERR_INVALID_IDENT, "export", str);
+		fd_printf(STDERR_FILENO, ERR_INVALID_IDENT, "export", str);
 		return (1);
 	}
 	return (0);
 }
 
-void	sort_env(t_data *data)
+void sort_env(t_data *data)
 {
-	char	*tmp;
-	int		i;
-	int		j;
+	char *tmp;
+	int i;
+	int j;
 
 	i = 0;
 	while (data->env[i])
@@ -88,14 +85,14 @@ void	sort_env(t_data *data)
 	}
 }
 
-void	cd_home(t_data *data)
+void cd_home(t_data *data)
 {
-	char	*path;
-	int		i;
+	char *path;
+	int i;
 
 	if (!check_home(data))
 	{
-		ft_dprintf(STDERR_FILENO, ERR_UNSET, "HOME");
+		fd_printf(STDERR_FILENO, ERR_UNSET, "HOME");
 		data->exit_status = EXIT_FAILURE;
 	}
 	else
@@ -105,9 +102,9 @@ void	cd_home(t_data *data)
 		i = chdir(path);
 		if (i)
 		{
-			ft_dprintf(STDERR_FILENO, ERR_NO_SUCH_FILE_2, "cd", path);
+			fd_printf(STDERR_FILENO, ERR_NO_SUCH_FILE_2, "cd", path);
 			data->exit_status = EXIT_FAILURE;
-			return ;
+			return;
 		}
 		set_pwd(data);
 		free(path);

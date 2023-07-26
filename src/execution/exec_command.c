@@ -18,7 +18,7 @@ int	exec_empty_cmd(t_mini *proc)
 	{
 		init_redirections(&current);
 		if (current->fd == -1)
-			return (ft_dprintf(2, ERR_PERMISSION, current->file),
+			return (fd_printf(2, ERR_PERMISSION, current->file),
 				EXIT_FAILURE);
 		if (current->fd == -2)
 			return (EXIT_FAILURE);
@@ -32,12 +32,12 @@ void	dup_or_error(t_redir *current)
 	init_redirections(&current);
 	if (current->fd == -1)
 	{
-		ft_dprintf(STDERR_FILENO, ERR_PERMISSION, current->file);
+		fd_printf(STDERR_FILENO, ERR_PERMISSION, current->file);
 		exit(EXIT_FAILURE);
 	}
 	if (current->fd == -2)
 	{
-		ft_dprintf(STDERR_FILENO, ERR_NO_SUCH_FILE, current->file);
+		fd_printf(STDERR_FILENO, ERR_NO_SUCH_FILE, current->file);
 		exit(EXIT_FAILURE);
 	}
 	if (current->type == INPUT)
@@ -69,7 +69,7 @@ void	exec_cmd(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
 	}
 	if (execve(proc->cmd, proc->args, data->env) == -1 && !proc->error)
 	{
-		ft_dprintf(STDERR_FILENO, CUSTOM, proc->cmd, strerror(errno));
+		fd_printf(STDERR_FILENO, CUSTOM, proc->cmd, strerror(errno));
 		exit(126);
 	}
 	exit(data->exit_status);
@@ -84,10 +84,10 @@ void	wait_for_child(pid_t pid, int _pipe[2], int prev_pipe[2], int *status)
 	signal(SIGINT, SIG_IGN);
 	if (waitpid(pid, status, 0) == -1)
 	{
-		ft_dprintf(STDERR_FILENO, FAIL_WAITPID, strerror(errno));
+		fd_printf(STDERR_FILENO, FAIL_WAITPID, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	if (WIFSIGNALED(*status) && WTERMSIG(*status) == SIGQUIT)
-		ft_dprintf(STDERR_FILENO, "Quit: %d\n", WTERMSIG(*status));
+		fd_printf(STDERR_FILENO, "Quit: %d\n", WTERMSIG(*status));
 	signal(SIGINT, sig_handler);
 }

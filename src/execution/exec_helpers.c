@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	exec_builtin_pipe(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
+int	exec_builtin_pipe(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2])
 {
 	pid_t	pid;
 	int		status;
@@ -9,64 +9,64 @@ int	exec_builtin_pipe(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2]
 	status = 0;
 	pid = fork();
 	if (pid == 0)
-		exec_piped(data, proc, _pipe, prev_pipe);
+		exec_piped(data, mini, _pipe, prev_pipe);
 	else if (pid > 0)
 		wait_for_child(pid, _pipe, prev_pipe, &status);
 	else
-		ft_dprintf(2, FAIL_FORK, strerror(errno));
+		fd_printf(2, FAIL_FORK, strerror(errno));
 	return (exit_status(status));
 }
 
-void	exec_piped(t_data *data, t_mini *proc, int _pipe[2], int prev_pipe[2])
+void	exec_piped(t_data *data, t_mini *mini, int _pipe[2], int prev_pipe[2])
 {
 	t_redir	*current;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (proc->previous && proc->previous->separator == PIPE_TOKEN)
+	if (mini->previous && mini->previous->separator == PIPE_TOKEN)
 		dup_and_close(prev_pipe[0], STDIN_FILENO);
-	if (proc->separator == PIPE_TOKEN)
+	if (mini->separator == PIPE_TOKEN)
 		dup_and_close(_pipe[1], STDOUT_FILENO);
-	current = proc->head;
+	current = mini->head;
 	while (current)
 	{
 		dup_or_error(current);
 		current = current->next;
 	}
-	exit(exec_builtin(data, proc->cmd, proc->args));
+	exit(exec_builtin(data, mini->cmd, mini->args));
 }
 
-void	check_if_dots(t_data *data, t_mini **proc)
+void	error_dots(t_data *data, t_mini **mini)
 {
-	if (!(*proc)->args)
+	if (!(*mini)->args)
 		return ;
-	if (ft_strcmp((*proc)->args[0], ".") == 0)
+	if (!ft_strcmp((*mini)->args[0], "."))
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: .: filename argument required\n");
-		ft_dprintf(STDERR_FILENO, ".: usage: . filename [arguments]\n");
+		fd_printf(STDERR_FILENO, "minishell: .: filename argument required\n");
+		fd_printf(STDERR_FILENO, ".: usage: . filename [arguments]\n");
 		data->exit_status = 2;
-		(*proc)->error = 1;
+		(*mini)->error = 1;
 	}
-	else if (ft_strcmp((*proc)->args[0], "..") == 0)
+	else if (!ft_strcmp((*mini)->args[0], ".."))
 	{
-		ft_dprintf(STDERR_FILENO, ERR_CMD_NOT_FOUND, (*proc)->args[0]);
+		fd_printf(STDERR_FILENO, ERR_CMD_NOT_FOUND, (*mini)->args[0]);
 		data->exit_status = 127;
-		(*proc)->error = 1;
+		(*mini)->error = 1;
 	}
 }
 
-void	check_if_directory(t_data *data, t_mini **proc)
+void	error_dir(t_data *data, t_mini **mini)
 {
 	DIR	*dir;
 
-	if(!(*proc)->cmd)
+	if(!(*mini)->cmd)
 		return;
 	else
-		dir = opendir((*proc)->cmd);
-	if (dir && !(*proc)->error)
+		dir = opendir((*mini)->cmd);
+	if (dir && !(*mini)->error)
 	{
-		ft_dprintf(2, CUSTOM, (*proc)->args[0], "is a directory");
-		(*proc)->error = 1;
+		fd_printf(2, CUSTOM, (*mini)->args[0], "is a directory");
+		(*mini)->error = 1;
 		data->exit_status = 126;
 		closedir(dir);
 	}

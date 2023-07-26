@@ -8,7 +8,7 @@ void	ft_chdir(t_data *data, char *path)
 	i = chdir(path);
 	if (i)
 	{
-		ft_dprintf(STDERR_FILENO, ERR_NO_SUCH_FILE_2, "cd", path);
+		fd_printf(STDERR_FILENO, ERR_NO_SUCH_FILE_2, "cd", path);
 		data->exit_status = EXIT_FAILURE;
 		return ;
 	}
@@ -24,7 +24,7 @@ void	cd_oldpwd(t_data *data)
 	path = ft_getenv(data, "OLDPWD");
 	if (!path)
 	{
-		ft_dprintf(STDERR_FILENO, ERR_UNSET, "OLDPWD");
+		fd_printf(STDERR_FILENO, ERR_UNSET, "OLDPWD");
 		data->exit_status = EXIT_FAILURE;
 	}
 	else

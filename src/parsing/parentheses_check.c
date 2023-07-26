@@ -6,14 +6,14 @@ int	open_parenth_check(t_data *data, char **lx, int *x, int i)
 	if (i && ft_strcmp(lx[i - 1], "&&") && ft_strcmp(lx[i - 1], "||")
 		&& ft_strcmp(lx[i - 1], "|") && ft_strcmp(lx[i - 1], "("))
 	{
-		ft_dprintf(2, UNEXPECTED_TOKEN, lx[i]);
+		fd_printf(2, UNEXPECTED_TOKEN, lx[i]);
 		data->exit_status = 258;
 		return (1);
 	}
 	if (lx[i + 1] && (!ft_strcmp(lx[i + 1], ")") || !ft_strcmp(lx[i + 1], "&&")
 			|| !ft_strcmp(lx[i + 1], "||") || !ft_strcmp(lx[i + 1], "||")))
 	{
-		ft_dprintf(2, UNEXPECTED_TOKEN, lx[i + 1]);
+		fd_printf(2, UNEXPECTED_TOKEN, lx[i + 1]);
 		data->exit_status = 258;
 		return (1);
 	}
@@ -50,12 +50,12 @@ int	parentheses_check(t_data *data, char **lx, int i, int *x, int *y)
 	{
 		if (*x > *y)
 		{
-			ft_dprintf(2, UNEXPECTED_TOKEN, "(");
+			fd_printf(2, UNEXPECTED_TOKEN, "(");
 			return (data->exit_status = 258, 1);
 		}
 		else if (*x < *y)
 		{
-			ft_dprintf(2, UNEXPECTED_TOKEN, ")");
+			fd_printf(2, UNEXPECTED_TOKEN, ")");
 			return (data->exit_status = 258, 1);
 		}
 	}

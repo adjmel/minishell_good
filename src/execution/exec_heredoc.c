@@ -28,7 +28,7 @@ void	exec_heredoc(t_data *data, t_redir *current)
 		line = expand(data, line, 0);
 		if (!line)
 			line = ft_strdup("");
-		ft_dprintf(current->fd, "%s\n", line);
+		fd_printf(current->fd, "%s\n", line);
 		free(line);
 	}
 	close(current->fd);
@@ -61,7 +61,7 @@ int	handle_heredoc(t_data *data, pid_t pid, int *status)
 	data->here_doc = 1;
 	if (waitpid(pid, status, 0) == -1)
 	{
-		ft_dprintf(STDERR_FILENO, FAIL_WAITPID, strerror(errno));
+		fd_printf(STDERR_FILENO, FAIL_WAITPID, strerror(errno));
 		return (EXIT_FAILURE);
 	}
 	data->here_doc = 0;

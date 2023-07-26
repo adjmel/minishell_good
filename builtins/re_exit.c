@@ -19,18 +19,18 @@ int	not_num(char *str)
 
 void	re_exit(char **args, t_data *data)
 {
-	ft_dprintf(STDERR_FILENO, "exit\n");
+	fd_printf(STDERR_FILENO, "exit\n");
 	if (args[1])
 	{
 		if (not_num(args[1]))
 		{
-			ft_dprintf(STDERR_FILENO, ERR_NUMERIC_ARG, args[1]);
+			fd_printf(STDERR_FILENO, ERR_NUMERIC_ARG, args[1]);
 			data->exit_status = 255;
 			exit(data->exit_status);
 		}
 		else if (args[2])
 		{
-			ft_dprintf(STDERR_FILENO, ERR_TOO_MANY_ARGS);
+			fd_printf(STDERR_FILENO, ERR_TOO_MANY_ARGS);
 			data->exit_status = 1;
 			return ;
 		}
