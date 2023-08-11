@@ -11,7 +11,7 @@ int	main(int argc, char **argv, char **env)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, sig_handler);
 		input = readline("\033[1;34m minishell> \033[0m");
-		if (empty(&data, input))
+		if (empty(&data, input) == 1)
 			continue ;
 		add_history(input);
 		parsing(&data, input);
